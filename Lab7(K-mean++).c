@@ -172,3 +172,27 @@ making it suitable for grid-based and high-dimensional data.*/
 //     Until convergence
 //  6. Display clusters
 //  END
+
+// output
+// kandelmilan@kandels-MacBook-Air DatawareHouseandDataMining % ./K-means++Alg
+// Enter number of data points: 8
+// Enter number of clusters: 3
+// Enter data points (x y):
+// 2 10
+// 2 5
+// 8 4
+// 5 8
+// 7 5
+// 6 4
+// 3 2
+// 4 6
+
+// Final Clusters:
+// Point (2.00, 10.00) -> Cluster 2
+// Point (2.00, 5.00) -> Cluster 2
+// Point (8.00, 4.00) -> Cluster 1
+// Point (5.00, 8.00) -> Cluster 2
+// Point (7.00, 5.00) -> Cluster 1
+// Point (6.00, 4.00) -> Cluster 1
+// Point (3.00, 2.00) -> Cluster 0
+// Point (4.00, 6.00) -> Cluster 2

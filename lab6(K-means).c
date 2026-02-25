@@ -147,3 +147,25 @@ mean of the clustered points. This process repeats until the centroids no longer
 // 6. Until centroids do not change
 // 7. Display final clusters and centroids
 // END
+
+// OUTPUT
+// kandelmilan@kandels-MacBook-Air DatawareHouseandDataMining % ./K-meansAlgorithm
+// Enter number of data points: 7
+// Enter number of clusters: 2
+// Enter data points (x y):
+// 20 500
+// 40 1000
+// 30 800
+// 18 300
+// 28 1200
+// 35 1400
+// 45 1800
+
+// Final Clusters:
+// Point (20.00, 500.00) -> Cluster 0
+// Point (40.00, 1000.00) -> Cluster 1
+// Point (30.00, 800.00) -> Cluster 0
+// Point (18.00, 300.00) -> Cluster 0
+// Point (28.00, 1200.00) -> Cluster 1
+// Point (35.00, 1400.00) -> Cluster 1
+// Point (45.00, 1800.00) -> Cluster 1
