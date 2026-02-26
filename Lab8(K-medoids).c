@@ -172,7 +172,6 @@ int main()
 // 4. Display final medoids and clusters
 // END
 
-//gcc k-medoidsAlg.c -o k-medoidsAlg 
 
 // OUTPUT:
 // kandelmilan@kandels-MacBook-Air DatawareHouseandDataMining % ./k-medoidsAlg 
