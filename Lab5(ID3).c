@@ -1,105 +1,166 @@
 // WAP IN C TO IMPLEMENT ID3 ALGORITHM FOR DECISION TREE
 
-// CODE IN PROGRESS - NOT COMPLETED 
-
 #include <stdio.h>
-#include <string.h>
 #include <math.h>
 
-#define MAX 100
+#define MAX 10
 
 // Function to calculate entropy
-float entropy(int positive, int negative)
+float entropy(int pos, int neg)
 {
-    float p = (float)positive / (positive + negative);
-    float n = (float)negative / (positive + negative);
-    float ent = 0.0;
+    float p, n, ent = 0.0;
 
-    if (p > 0)
-        ent -= p * log2(p);
-    if (n > 0)
-        ent -= n * log2(n);
+    if (pos == 0 || neg == 0)
+        return 0.0;
 
+    p = (float)pos / (pos + neg);
+    n = (float)neg / (pos + neg);
+
+    ent = -p * log2(p) - n * log2(n);
     return ent;
 }
 
 int main()
 {
-    int n, i;
-    int positive[MAX], negative[MAX];
-    int totalPositive = 0, totalNegative = 0;
+    int attributes, i;
+    int totalPos, totalNeg;
 
-    printf("Enter number of training examples: ");
-    scanf("%d", &n);
+    printf("Enter total positive examples: ");
+    scanf("%d", &totalPos);
 
-    printf("Enter number of positive and negative examples for each attribute:\n");
-    for (i = 0; i < n; i++)
+    printf("Enter total negative examples: ");
+    scanf("%d", &totalNeg);
+
+    float totalEntropy = entropy(totalPos, totalNeg);
+    printf("\nTotal Entropy = %.4f\n", totalEntropy);
+
+    printf("\nEnter number of attributes: ");
+    scanf("%d", &attributes);
+
+    float bestGain = -1;
+    int bestAttribute = -1;
+
+    for (i = 0; i < attributes; i++)
     {
-        printf("Example %d - Positive: ", i);
-        scanf("%d", &positive[i]);
-        printf("Example %d - Negative: ", i);
-        scanf("%d", &negative[i]);
+        int values, j;
+        printf("\nEnter number of values for Attribute %d: ", i + 1);
+        scanf("%d", &values);
 
-        totalPositive += positive[i];
-        totalNegative += negative[i];
+        int pos[MAX], neg[MAX];
+        float weightedEntropy = 0.0;
+
+        for (j = 0; j < values; j++)
+        {
+            printf("Value %d - Positive examples: ", j + 1);
+            scanf("%d", &pos[j]);
+
+            printf("Value %d - Negative examples: ", j + 1);
+            scanf("%d", &neg[j]);
+
+            int subsetTotal = pos[j] + neg[j];
+            float subsetEntropy = entropy(pos[j], neg[j]);
+
+            weightedEntropy += ((float)subsetTotal /
+                                (totalPos + totalNeg)) *
+                               subsetEntropy;
+        }
+
+        float infoGain = totalEntropy - weightedEntropy;
+
+        printf("Information Gain of Attribute %d = %.4f\n", i + 1, infoGain);
+
+        if (infoGain > bestGain)
+        {
+            bestGain = infoGain;
+            bestAttribute = i + 1;
+        }
     }
 
-    float totalEntropy = entropy(totalPositive, totalNegative);
-    printf("\nTotal Entropy of the dataset: %.4f\n", totalEntropy);
+    printf("\nBest Attribute (Root Node) = Attribute %d\n", bestAttribute);
+    printf("Maximum Information Gain = %.4f\n", bestGain);
 
-    // Further steps would include choosing attributes with max information gain
-    // and recursively building the decision tree (not fully implemented here)
-    printf("Decision tree building steps follow ID3 recursive method.\n");
+    printf("\nFurther recursive splitting follows the same ID3 process.\n");
 
     return 0;
 }
 
-// Objectives (Any Two)
-// To understand the concept of the ID3 decision tree algorithm.
-// To implement ID3 algorithm for building a decision tree using entropy and information gain.
-
-// Theory (Short Paragraph)
 /*
-ID3 (Iterative Dichotomiser 3) is a decision tree algorithm used for classification tasks
-in machine learning. It builds a tree by selecting the attribute that maximizes information
-gain at each node. Information gain is calculated based on the entropy of the dataset, 
-which measures the disorder or impurity. The algorithm recursively partitions the data 
-based on attributes until all examples in a node belong to the same class or no attributes
-are left. ID3 handles categorical attributes and forms a clear tree structure for decision-making.
+Objectives:
+1. To understand the working principle of the ID3 decision tree algorithm.
+2. To implement entropy and information gain calculations to select the best attribute.
+
+Theory:
+ID3 (Iterative Dichotomiser 3) is a supervised machine learning algorithm
+used for classification problems. It constructs a decision tree by selecting
+the attribute that provides the highest information gain at each step. The
+core concept behind ID3 is entropy, which measures the impurity or disorder
+in a dataset.
+
+Information Gain is calculated by subtracting the weighted entropy of subsets
+from the total entropy of the dataset. The attribute with the maximum
+information gain is chosen as the root node. The dataset is then recursively
+partitioned until all examples in a node belong to the same class or no
+attributes remain.
+
+Algorithm:
+1. Start
+2. Input total positive and negative examples
+3. Calculate total entropy
+4. For each attribute:
+      a. Calculate entropy for each value
+      b. Compute weighted entropy
+      c. Calculate information gain
+5. Select attribute with maximum information gain
+6. Repeat recursively for subsets
+7. Stop when node becomes pure
+8. End
+
+Pseudo Code:
+BEGIN
+    Input total positive and negative examples
+    Compute total entropy
+
+    FOR each attribute
+        Input number of values
+        FOR each value
+            Input positive and negative examples
+            Compute entropy of subset
+            Compute weighted entropy
+        END FOR
+        Compute information gain
+    END FOR
+
+    Select attribute with maximum information gain
+END
 */
 
-// Algorithm (ID3)
-// Start
-// Input training dataset
-// Calculate entropy of the dataset
-// For each attribute:
-//      Calculate information gain
-// Select attribute with maximum information gain as root
-// Partition dataset based on selected attribute
-// Recursively repeat steps for each partition until all nodes are pure or no attributes left
-// Stop
+// OUTPUT
+/*
+kandelmilan@192 DatawareHouseandDataMining % ./ID3
+Enter total positive examples: 9
+Enter total negative examples: 5
 
-// Pseudo Code
-// BEGIN
-// 1. Input dataset
-// 2. Calculate entropy of target attribute
-// 3. For each attribute
-//      Calculate information gain
-// 4. Select attribute with max gain as decision node
-// 5. Partition dataset based on attribute values
-// 6. Recursively build subtrees for each partition
-// 7. Stop when all examples in node belong to same class
-// END
+Total Entropy = 0.9403
 
-// OUTPUT (Sample):
-// Enter number of training examples: 3
-// Enter number of positive and negative examples for each attribute:
-// Example 0 - Positive: 3
-// Example 0 - Negative: 2
-// Example 1 - Positive: 2
-// Example 1 - Negative: 2
-// Example 2 - Positive: 3
-// Example 2 - Negative: 1
+Enter number of attributes: 2
 
-// Total Entropy of the dataset: 0.9852
-// Decision tree building steps follow ID3 recursive method.
+Enter number of values for Attribute 1: 2
+Value 1 - Positive examples: 6
+Value 1 - Negative examples: 2
+Value 2 - Positive examples: 3
+Value 2 - Negative examples: 3
+Information Gain of Attribute 1 = 0.0481
+
+Enter number of values for Attribute 2: 2
+Value 1 - Positive examples: 7
+Value 1 - Negative examples: 1
+Value 2 - Positive examples: 2
+Value 2 - Negative examples: 4
+Information Gain of Attribute 2 = 0.2361
+
+Best Attribute (Root Node) = Attribute 2
+Maximum Information Gain = 0.2361
+
+Further recursive splitting follows the same ID3 process.
+
+*/
